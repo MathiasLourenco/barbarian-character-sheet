@@ -200,7 +200,8 @@ body.shake .wrap{animation:shake .4s}
   .main,.features,.extras,.attacks{grid-template-columns:1fr}
   .strip{grid-template-columns:repeat(3,1fr)}
   .hero{flex-wrap:wrap}
-  .hero .name{font-size:36px}
+  .hero .name{font-size:30px}
+  .emblem{width:60px;height:66px}
 }
 
 /* ---------- print / PDF ---------- */
@@ -291,7 +292,7 @@ body.shake .wrap{animation:shake .4s}
     <use href="#axe" transform="translate(100 0) scale(-1 1)"/>
   </svg>
   <div class="ident">
-    <input id="heroName" class="name" type="text" maxlength="22" placeholder="Name your hero" aria-label="Character name" autocomplete="off" spellcheck="false">
+    <input id="heroName" class="name" type="text" maxlength="22" placeholder="Your name" aria-label="Character name" autocomplete="off" spellcheck="false">
     <span class="print-only name-label">Character name</span>
     <div class="sub">Human Barbarian · Path of the Berserker · Level 5 · Soldier</div>
     <div class="motto">“When in doubt: RAGE, and hit the biggest thing.”</div>
