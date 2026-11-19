@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Level 5 Human Barbarian</title>
+<style>
+:root{
+  --bg:#140f0c;--parch:#f6eedb;--parch2:#ecdfc3;--ink:#2a1c13;--muted:#76604b;
+  --red:#b3261e;--red2:#7a130f;--ember:#ef7f2f;--gold:#c9a227;--line:#d2bf98;--ok:#2f7d32;
+  --serif:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+  --sans:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+html,body{margin:0}
+body{font-family:var(--sans);font-size:15px;line-height:1.4;color:var(--ink);min-height:100vh;
+  background:radial-gradient(1400px 700px at 50% -15%,#4a2a1a 0%,#1d1410 45%,var(--bg) 100%) no-repeat}
+.wrap{max-width:1280px;margin:0 auto;padding:18px 20px 40px}
+@media screen{.print-only{display:none!important}}
+button{font:inherit;color:inherit}
+
+/* header */
+.hero{display:flex;align-items:center;gap:18px;color:var(--parch);padding:6px 2px 18px}
+.emblem{width:92px;height:101px;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
+.ident{flex:1;min-width:0}
+.hero .name{display:block;width:min(620px,100%);font-family:var(--serif);font-size:56px;font-weight:700;line-height:1.05;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--parch);background:transparent;border:0;border-bottom:2px dashed rgba(233,211,168,.35);padding:0 0 2px;margin:0;
+  text-shadow:0 2px 0 #000,0 0 28px rgba(239,127,47,.35);transition:color .3s,text-shadow .3s,border-color .2s}
+.hero .name::placeholder{color:rgba(233,211,168,.38);text-shadow:none;letter-spacing:.04em}
+.hero .name:focus{outline:none;border-bottom-color:var(--ember)}
+.hero .sub{color:#e9d3a8;font-size:16px;letter-spacing:.05em;margin-top:6px}
+.hero .motto{font-family:var(--serif);font-style:italic;color:var(--ember);margin-top:4px;font-size:17px}
+.toolbar{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-self:flex-start}
+.btn{background:var(--parch2);color:var(--ink);border:1px solid #9b7f5a;border-radius:9px;padding:7px 13px;font-weight:600;cursor:pointer;
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 2px 4px rgba(0,0,0,.15);transition:transform .06s,filter .15s}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:linear-gradient(#c8342a,#8f1a13);color:#fff;border-color:#5e0f0b}
+.btn.dark{background:#2b201a;color:var(--parch);border-color:#5a4535}
+.btn.small{padding:3px 10px;font-size:13px}
+.btn.glow{box-shadow:0 0 0 3px rgba(239,127,47,.55)}
+
+/* stat strip */
+.strip{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:14px}
+.stat{background:linear-gradient(var(--parch),var(--parch2));border:0;border-radius:12px;padding:8px 6px;text-align:center;
+  box-shadow:0 6px 16px rgba(0,0,0,.35),inset 0 0 0 1px rgba(120,90,50,.35)}
+button.stat{cursor:pointer}
+button.stat:hover{box-shadow:0 6px 16px rgba(0,0,0,.35),inset 0 0 0 2px var(--red)}
+.stat b{display:block;font-family:var(--serif);font-size:28px;line-height:1.1;color:var(--red2)}
+.stat small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.stat em{display:block;font-style:normal;font-size:11px;color:var(--muted)}
+
+/* layout */
+.main{display:grid;grid-template-columns:290px minmax(0,1fr) 330px;gap:14px;align-items:start}
+.col{display:grid;gap:14px}
+.card{background:linear-gradient(var(--parch),var(--parch2));border-radius:14px;padding:14px 16px;
+  box-shadow:0 8px 20px rgba(0,0,0,.4),inset 0 0 0 1px rgba(120,90,50,.35);transition:box-shadow .3s}
+.card h2{font-family:var(--serif);font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:var(--red2);
+  margin:0 0 10px;padding-bottom:5px;border-bottom:2px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.card h2 span{font-family:var(--sans);font-size:11px;letter-spacing:.04em;text-transform:none;color:var(--muted);font-weight:400}
+
+/* abilities */
+.abilities{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.abil{position:relative;background:#fffaf0;border:1px solid var(--line);border-radius:10px;padding:6px 4px 5px;text-align:center;cursor:pointer}
+.abil:hover{border-color:var(--red)}
+.abil.main-stat{border:2px solid var(--red)}
+.abil .k{display:block;font-size:11px;letter-spacing:.14em;color:var(--muted);font-weight:700}
+.abil .m{display:block;font-family:var(--serif);font-size:26px;font-weight:700;line-height:1.1}
+.abil .s{display:inline-block;font-size:12px;border:1px solid var(--line);border-radius:20px;padding:0 8px;background:var(--parch)}
+.abil .tag{position:absolute;top:4px;right:4px}
+.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;padding:1px 5px;border-radius:5px;background:var(--ok);color:#fff;white-space:nowrap}
+.tag.soft{background:none;color:var(--muted);border:1px dashed #b49f7c;font-weight:600}
+
+/* rows */
+.rows{display:grid;gap:1px}
+.row{display:grid;grid-template-columns:12px 1fr auto auto;align-items:center;gap:6px;width:100%;text-align:left;
+  background:none;border:0;border-bottom:1px dotted #cdb894;padding:3px 2px;cursor:pointer;border-radius:4px}
+.row:hover{background:rgba(179,38,30,.08)}
+.dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--ink)}
+.dot.on{background:var(--ink)}
+.row .nm small{color:var(--muted);font-size:11px;margin-left:3px}
+.row .val{font-weight:700;font-variant-numeric:tabular-nums;min-width:28px;text-align:right}
+.row .val.rage{color:var(--red)}
+.star{color:var(--red);font-weight:700}
+.legend{font-size:11.5px;color:var(--muted);margin-top:8px}
+
+/* combat */
+.rage-row{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.rage-btn{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:.1em;color:#fff;padding:10px 22px;border-radius:14px;min-width:170px;
+  border:2px solid #5e0f0b;background:radial-gradient(circle at 50% 30%,#e0452f,#8f1a13 70%);cursor:pointer;
+  box-shadow:0 6px 16px rgba(143,26,19,.45),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .08s}
+.rage-btn:hover{transform:scale(1.03)}
+.rage-btn:disabled{filter:grayscale(.8);opacity:.6;cursor:not-allowed;transform:none}
+.rage-status{font-size:13px}
+.rage-status b{color:var(--red2)}
+.toggle{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fffaf0;cursor:pointer;margin-bottom:10px}
+.toggle input{width:20px;height:20px;accent-color:var(--red);flex:none}
+.toggle.locked{opacity:.6;cursor:not-allowed}
+.toggle small{display:block;color:var(--muted);font-size:12px}
+.turn{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{font-size:12px;padding:3px 9px;border-radius:20px;border:1px solid var(--line);background:#fffaf0}
+.chip.done{background:#e3d6ba;color:var(--muted);text-decoration:line-through}
+.chip.go{background:#fde7d6;border-color:var(--ember)}
+button.chip{cursor:pointer}
+.attacks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.atk{background:#fffaf0;border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.atk-head{display:flex;justify-content:space-between;align-items:baseline;gap:6px;flex-wrap:wrap}
+.atk-head b{font-family:var(--serif);font-size:19px}
+.pill{font-size:11px;color:var(--muted)}
+.atk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center}
+.atk-stats div{background:var(--parch);border-radius:8px;padding:4px}
+.atk-stats small{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.atk-stats b{font-size:17px}
+.atk-stats .rg b{color:var(--red)}
+.atk-note{font-size:12.5px}
+.atk-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+.result{margin-top:12px;border-radius:14px;padding:14px;background:#2b201a;color:var(--parch);min-height:150px;text-align:center}
+.r-title{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#d9bf8f}
+.r-big{font-family:var(--serif);font-size:54px;font-weight:700;line-height:1.1;color:#fff}
+.r-big.crit{color:var(--gold);text-shadow:0 0 18px rgba(201,162,39,.7)}
+.r-big.fail{color:#ff8a70}
+.r-detail{font-size:13px;color:#e8d8b8}
+.r-detail b{color:#fff}
+.r-actions{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.r-actions:empty{display:none}
+.r-big.warn{color:var(--ember)}
+.warn{list-style:none;padding:0;margin:8px auto 0;max-width:560px;text-align:left;display:grid;gap:8px}
+.warn li{background:rgba(255,255,255,.06);border:1px solid rgba(239,127,47,.6);border-radius:10px;padding:8px 10px}
+.warn li div{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
+.r-detail small{color:#cdb894}
+.pop{animation:pop .35s ease-out}
+@keyframes pop{0%{transform:scale(.6) rotate(-8deg);opacity:0}70%{transform:scale(1.12)}100%{transform:none;opacity:1}}
+.endturn{width:100%;margin-top:10px;padding:10px}
+.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:6px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:center;padding:6px 8px;border-radius:10px;background:#fffaf0;border:1px solid var(--line);transition:opacity .2s}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font-weight:700;font-family:var(--serif)}
+.steps li.done{opacity:.55}
+.steps li.done::before{content:"\2713";background:var(--ok)}
+.tip{font-size:13px;margin:10px 0 0;padding:8px 10px;border-left:4px solid var(--ember);background:rgba(239,127,47,.1);border-radius:0 8px 8px 0}
+
+/* hp + resources */
+.hpbig{display:flex;align-items:baseline;justify-content:center;gap:6px;font-family:var(--serif)}
+.hpbig b{font-size:56px;line-height:1;color:var(--red2)}
+.hpbig small{font-size:22px;color:var(--muted)}
+.bar{position:relative;height:14px;border-radius:8px;background:#d8c8a6;overflow:hidden;margin:8px 0 4px}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#8f1a13,#d2452f);transition:width .3s}
+.bar i.temp{background:repeating-linear-gradient(45deg,#4f7fb3,#4f7fb3 6px,#6e9bd0 6px,#6e9bd0 12px);opacity:.9}
+.hpmeta{display:flex;justify-content:space-between;font-size:13px}
+.hpctl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.hpctl input{grid-column:1/-1;font-size:20px;padding:6px 10px;border-radius:9px;border:1px solid #9b7f5a;text-align:center;background:#fffaf0;color:var(--ink)}
+.hpctl .wide{grid-column:1/-1}
+.death{margin-top:10px;padding:10px;border-radius:10px;background:#2b201a;color:var(--parch);text-align:center;font-size:14px}
+.death .btn{margin-top:8px}
+.res{display:grid;grid-template-columns:1fr auto;gap:4px 8px;align-items:center;padding:7px 0;border-bottom:1px dotted #cdb894}
+.res:last-child{border-bottom:0}
+.res .nm{font-weight:600}
+.res .nm small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+.pips{display:flex;gap:5px;grid-column:1/-1}
+.pip{width:18px;height:18px;border-radius:50%;border:2px solid var(--red2);background:none;padding:0;cursor:pointer}
+.pip.on{background:radial-gradient(circle at 35% 35%,#e0452f,#8f1a13)}
+.pip.hd{border-radius:4px}
+.rests{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.dice{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.log{max-height:260px;overflow:auto;display:grid;gap:5px;font-size:12.5px}
+.log div{background:#fffaf0;border:1px solid var(--line);border-radius:8px;padding:5px 8px}
+.log div b{color:var(--red2)}
+.log div small{color:var(--muted)}
+.log div:first-child{border-color:var(--ember);box-shadow:0 0 0 2px rgba(239,127,47,.2)}
+
+/* page 2 */
+.section-title{font-family:var(--serif);color:var(--parch);letter-spacing:.14em;text-transform:uppercase;font-size:18px;margin:28px 2px 10px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.feat h3{font-family:var(--serif);font-size:18px;margin:0 0 4px;color:var(--red2)}
+.when{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;background:var(--ink);color:var(--parch);border-radius:5px;padding:1px 7px;margin-bottom:6px}
+.feat p,.feat ul{margin:0;font-size:13.5px}
+.feat ul,.extras ul{padding-left:18px}
+.feat li,.extras li{margin-bottom:2px}
+.extras{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:12px;margin-top:12px}
+.extras ul{margin:0;font-size:13.5px}
+.extras p{font-size:13.5px;margin:0 0 6px}
+
+/* rage mode */
+body.raging .hero .name{color:#ff6a4d;text-shadow:0 2px 0 #000,0 0 30px rgba(255,80,40,.85)}
+body.raging .card.combat,body.raging .card.hp{box-shadow:0 0 0 3px var(--red),0 0 30px rgba(220,50,30,.55)}
+body.raging .rage-btn{animation:throb 1.1s ease-in-out infinite}
+@keyframes throb{50%{box-shadow:0 0 26px 6px rgba(224,69,47,.75)}}
+body.shake .wrap{animation:shake .4s}
+@keyframes shake{20%{transform:translate(-6px,2px)}40%{transform:translate(5px,-3px)}60%{transform:translate(-4px,1px)}80%{transform:translate(3px,-1px)}}
+
+@media screen and (max-width:1150px){
+  .main{grid-template-columns:1fr 1fr}
+  .col.mid{grid-column:1/-1;order:-1}
+  .features{grid-template-columns:1fr 1fr}
+  .strip{grid-template-columns:repeat(3,1fr)}
+}
+@media screen and (max-width:720px){
+  .main,.features,.extras,.attacks{grid-template-columns:1fr}
+  .strip{grid-template-columns:repeat(3,1fr)}
+  .hero{flex-wrap:wrap}
+  .hero .name{font-size:36px}
+}
+
+/* ---------- print / PDF ---------- */
+@page{size:A4;margin:8mm}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html,body{background:#fff}
+  body{font-size:8.4pt;line-height:1.28}
+  .wrap{max-width:none;padding:0}
+  .no-print,.screen-only{display:none!important}
+  .print-only{display:block}
+  .hero{color:var(--ink);padding:0 0 2.5mm;gap:4mm;border-bottom:2px solid var(--red2);margin-bottom:3mm}
+  .emblem{width:17mm;height:19mm;filter:none}
+  .hero .name{font-size:24pt;color:var(--red2);text-shadow:none;width:105mm;border-bottom:1.5px solid var(--ink);height:12mm}
+  .hero .name::placeholder{color:transparent}
+  .name-label{display:block;font-size:6.5pt;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .hero .sub{color:var(--ink);font-size:10pt;margin-top:1mm}
+  .hero .motto{font-size:10pt;color:var(--red);margin-top:.5mm}
+  .player{margin-left:auto;align-self:flex-end;font-size:9.5pt;color:var(--muted)}
+  .strip{gap:2mm;margin-bottom:3mm}
+  .stat,.card{box-shadow:none!important;background:#fdf8ee;border:1px solid #c9b289;break-inside:avoid}
+  .stat{padding:1.3mm 1mm;border-radius:2.5mm}
+  .stat b{font-size:15pt}
+  .stat small,.stat em{font-size:6.5pt}
+  .main{grid-template-columns:50mm minmax(0,1fr) 52mm;gap:3mm}
+  .col{gap:3mm}
+  .card{padding:2.4mm 3mm;border-radius:3mm}
+  .card h2{font-size:8.5pt;margin-bottom:1.5mm;padding-bottom:1mm}
+  .abilities{gap:1.5mm}
+  .abil{padding:1mm .5mm}
+  .abil .m{font-size:14pt}
+  .abil .k,.abil .s{font-size:7pt}
+  .abil .tag{font-size:5.5pt;top:1mm;right:1mm;padding:0 2px}
+  .tag{font-size:6.5pt}
+  .row{padding:.45mm 1mm;font-size:8.2pt}
+  .dot{width:2.6mm;height:2.6mm}
+  .legend{font-size:7pt;margin-top:1.5mm}
+  .attacks{grid-template-columns:1fr;gap:2mm}
+  .atk{padding:2mm 2.5mm;gap:1mm;border-radius:2.5mm}
+  .atk-head b{font-size:12pt}
+  .pill{font-size:7pt}
+  .atk-stats b{font-size:11pt}
+  .atk-stats small{font-size:6pt}
+  .atk-note{font-size:8pt}
+  .steps{gap:1.5mm}
+  .steps li{padding:1.2mm 2mm;grid-template-columns:5.5mm 1fr;gap:2mm;border-radius:2mm}
+  .steps li::before{width:5mm;height:5mm;font-size:8pt}
+  .tip{font-size:8pt;margin-top:2mm;padding:1.5mm 2mm}
+  .wboxes{display:grid;grid-template-columns:1fr 1fr;gap:2mm}
+  .wbox{height:15mm;border:1.5px solid var(--ink);border-radius:2mm;padding:.8mm 2mm;background:#fff}
+  .wbox small{font-size:6.5pt;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+  .dsp{margin-top:2mm;font-size:8.2pt}
+  .res{padding:1.3mm 0;gap:1mm 2mm}
+  .res .nm small{font-size:7pt}
+  .pip{width:4mm;height:4mm;border-width:1.5px}
+  .pip.on{background:#fff}
+  .lines{height:52mm;background:repeating-linear-gradient(#fdf8ee 0 6.4mm,#c9b289 6.4mm 6.7mm)}
+  .page2{break-before:page}
+  .section-title{color:var(--red2);font-size:12pt;margin:0 0 3mm}
+  .features{gap:3mm}
+  .feat h3{font-size:11pt;margin-bottom:.5mm}
+  .when{font-size:6.8pt;margin-bottom:1mm}
+  .feat p,.feat ul,.extras p,.extras ul{font-size:8.4pt}
+  .extras{gap:3mm;margin-top:3mm}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <svg class="emblem" viewBox="0 0 100 110" aria-hidden="true">
+    <defs>
+      <linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c7372a"/><stop offset="1" stop-color="#5a0e0a"/></linearGradient>
+      <linearGradient id="bl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7f4ec"/><stop offset="1" stop-color="#8e959c"/></linearGradient>
+      <linearGradient id="wd" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b4325"/><stop offset="1" stop-color="#3a2212"/></linearGradient>
+    </defs>
+    <path d="M50 4 L92 17 V52 C92 78 73 96 50 106 C27 96 8 78 8 52 V17 Z" fill="url(#sh)" stroke="#c9a227" stroke-width="3.5"/>
+    <path d="M50 12 L84 22.5 V52 C84 73 69 88 50 97 C31 88 16 73 16 52 V22.5 Z" fill="none" stroke="rgba(255,220,150,.35)" stroke-width="1.5"/>
+    <g id="axe" transform="rotate(28 50 60)">
+      <rect x="48" y="16" width="4" height="70" rx="2" fill="url(#wd)" stroke="#24150b" stroke-width=".8"/>
+      <path d="M48 72 h4 M48 76 h4 M48 80 h4" stroke="#24150b" stroke-width="1.2"/>
+      <circle cx="50" cy="87" r="3" fill="#c9a227" stroke="#5a4310" stroke-width=".8"/>
+      <path d="M52 25 L58 27 C62 20 67 16 70 16 C74 28 74 42 70 54 C67 52 62 48 58 41 L52 39 Z" fill="url(#bl)" stroke="#2f2f2f" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M70.5 18 C73.5 29 73.5 41 70.5 52" fill="none" stroke="#fff" stroke-width="1.4" opacity=".9"/>
+      <rect x="47.3" y="23" width="5.4" height="17" rx="1.2" fill="#55595e" stroke="#2f2f2f" stroke-width=".8"/>
+    </g>
+    <use href="#axe" transform="translate(100 0) scale(-1 1)"/>
+  </svg>
+  <div class="ident">
+    <input id="heroName" class="name" type="text" maxlength="22" placeholder="Name your hero" aria-label="Character name" autocomplete="off" spellcheck="false">
+    <span class="print-only name-label">Character name</span>
+    <div class="sub">Human Barbarian · Path of the Berserker · Level 5 · Soldier</div>
+    <div class="motto">“When in doubt: RAGE, and hit the biggest thing.”</div>
+  </div>
+  <div class="toolbar no-print">
+    <button class="btn dark" data-act="print">Print / save as PDF</button>
+    <button class="btn dark" data-act="reset">Reset sheet</button>
+  </div>
+  <div class="print-only player">Player: ______________________</div>
+</header>
+
+<section class="strip">
+  <div class="stat"><small>Armor Class</small><b>14</b><em>no armor needed</em></div>
+  <div class="stat"><small>Hit Points</small><b>65</b><em>maximum</em></div>
+  <div class="stat"><small>Speed</small><b>40 ft</b><em>fast movement</em></div>
+  <button class="stat" data-roll="init"><small>Initiative</small><b>+1</b><em class="no-print">click to roll</em><em class="print-only">roll d20 + 1</em></button>
+  <div class="stat"><small>Proficiency</small><b>+3</b><em>trained bonus</em></div>
+  <div class="stat"><small>Passive Perception</small><b>14</b><em>notice things</em></div>
+</section>
+
+<main class="main">
+  <div class="col">
+    <section class="card"><h2>Abilities <span class="no-print">click to roll</span></h2><div class="abilities" id="abilities"></div></section>
+    <section class="card"><h2>Saving Throws</h2><div class="rows" id="saves"></div></section>
+    <section class="card"><h2>Skills <span class="no-print">click to roll</span></h2><div class="rows" id="skills"></div>
+      <div class="legend">● = trained (+3) &nbsp;·&nbsp; <span class="star">★</span> = while raging, roll it with STR and advantage</div>
+    </section>
+  </div>
+
+  <div class="col mid">
+    <section class="card combat">
+      <h2>Combat <span>Extra Attack: 2 swings per turn</span></h2>
+      <div class="rage-row no-print">
+        <button id="rageBtn" class="rage-btn" data-act="rage">RAGE!</button>
+        <div class="rage-status" id="rageStatus"></div>
+      </div>
+      <label class="toggle no-print" id="recklessLbl">
+        <input type="checkbox" id="reckless">
+        <span><b>Reckless Attack</b> this turn<small>Advantage on your attacks, but enemies get advantage on you. Choose before your first swing.</small></span>
+      </label>
+      <div class="turn no-print" id="turnInfo"></div>
+      <div class="attacks">
+        <div class="atk">
+          <div class="atk-head"><b>Greataxe</b><span class="pill">melee · 5 ft · two hands</span></div>
+          <div class="atk-stats">
+            <div><small>To hit</small><b>+7</b></div>
+            <div><small>Damage</small><b>1d12+4</b></div>
+            <div class="rg"><small>Raging</small><b>1d12+6</b></div>
+          </div>
+          <div class="atk-note"><b>Extra Attack:</b> one Attack action = <b>2 swings</b>.</div>
+          <div class="atk-note"><b>Frenzy:</b> raging + reckless → your first hit each turn deals <b>+2d6</b>.</div>
+          <div class="atk-note"><b>Cleave:</b> after a hit, once per turn, attack a 2nd enemy next to the first (1d12, +2 if raging).</div>
+          <div class="atk-btns no-print">
+            <button class="btn primary" data-act="attack" data-w="greataxe" id="axeBtn">Swing greataxe</button>
+            <button class="btn" data-act="attack" data-w="cleave" id="cleaveBtn">Cleave</button>
+          </div>
+        </div>
+        <div class="atk">
+          <div class="atk-head"><b>Handaxe ×4</b><span class="pill">thrown 20/60 ft · or melee</span></div>
+          <div class="atk-stats">
+            <div><small>To hit</small><b>+7</b></div>
+            <div><small>Damage</small><b>1d6+4</b></div>
+            <div class="rg"><small>Raging</small><b>1d6+6</b></div>
+          </div>
+          <div class="atk-note"><b>Vex:</b> after a hit, you get advantage on your next attack against that same enemy.</div>
+          <div class="atk-note">For enemies out of reach. Pick your axes up after the fight!</div>
+          <div class="atk-btns no-print">
+            <button class="btn primary" data-act="attack" data-w="handaxe">Throw handaxe</button>
+          </div>
+        </div>
+      </div>
+      <div class="result no-print" aria-live="polite">
+        <div class="r-title" id="rTitle">Ready</div>
+        <div class="r-big" id="rBig">⚔</div>
+        <div class="r-detail" id="rDetail">Click <b>RAGE!</b>, tick Reckless Attack, then swing your greataxe <b>twice</b> (Extra Attack). Every roll is explained here.</div>
+        <div class="r-actions" id="rActions"></div>
+      </div>
+      <button class="btn dark endturn no-print" data-act="endturn">End turn → start my next turn</button>
+    </section>
+
+    <section class="card guide">
+      <h2>Your turn in 5 steps</h2>
+      <ol class="steps" id="steps">
+        <li><span><b>Bonus action: RAGE.</b> Only on your first turn. It keeps going as long as you keep attacking.</span></li>
+        <li><span><b>Go Reckless</b> before your first swing: advantage, plus Frenzy damage.</span></li>
+        <li><span><b>Action: Attack.</b> Swing your greataxe.</span></li>
+        <li><span><b>Extra Attack: swing again!</b> Your Attack action gives you <b>2 swings</b>. Hit someone? You may also Cleave an enemy next to them.</span></li>
+        <li><span><b>Move</b> up to 40 ft: before, between or after your swings.</span></li>
+      </ol>
+      <p class="tip"><b>Enemy walks away from you?</b> Use your reaction for one free swing (opportunity attack).<br>
+        <b>Enemy too far away?</b> Throw a handaxe (2 throws, thanks to Extra Attack).<br>
+        <b>Rolled badly?</b> Heroic Inspiration lets you reroll once per day.</p>
+    </section>
+  </div>
+
+  <div class="col">
+    <section class="card hp">
+      <h2>Hit Points <span>max 65</span></h2>
+      <div class="screen-only">
+        <div class="hpbig"><b id="hpCur">65</b><small>/ 65</small></div>
+        <div class="bar"><i id="hpBar"></i><i class="temp" id="tempBar"></i></div>
+        <div class="hpmeta"><span>Temp HP: <b id="hpTemp">0</b></span><span id="hpState"></span></div>
+        <div class="hpctl">
+          <input type="number" id="hpAmt" min="1" max="300" value="5" aria-label="Amount of damage or healing">
+          <button class="btn primary" data-act="dmg">Take damage</button>
+          <button class="btn" data-act="heal">Heal</button>
+          <button class="btn wide" data-act="dmghalf" id="halfBtn">Take half damage (raging vs. weapons &amp; claws)</button>
+          <button class="btn wide" data-act="temp">Gain temp HP</button>
+        </div>
+        <div class="death" id="death" hidden></div>
+      </div>
+      <div class="print-only">
+        <div class="wboxes"><div class="wbox"><small>Current HP</small></div><div class="wbox"><small>Temp HP</small></div></div>
+        <div class="dsp"><b>Death saves</b><br>success ○ ○ ○ &nbsp;·&nbsp; fail ○ ○ ○</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Resources <span class="print-only">tick off</span><span class="no-print">click to tick</span></h2>
+      <div id="resources"></div>
+      <div class="rests no-print">
+        <button class="btn" data-act="short">Short rest (1 h)</button>
+        <button class="btn" data-act="long">Long rest (8 h)</button>
+      </div>
+    </section>
+
+    <section class="card no-print">
+      <h2>Dice <span>roll anything</span></h2>
+      <div class="dice">
+        <button class="btn small" data-roll="die" data-n="4">d4</button>
+        <button class="btn small" data-roll="die" data-n="6">d6</button>
+        <button class="btn small" data-roll="die" data-n="8">d8</button>
+        <button class="btn small" data-roll="die" data-n="10">d10</button>
+        <button class="btn small" data-roll="die" data-n="12">d12</button>
+        <button class="btn small" data-roll="die" data-n="20">d20</button>
+        <button class="btn small" data-roll="die" data-n="100">d100</button>
+      </div>
+      <div class="log" id="log"></div>
+    </section>
+
+    <section class="card print-only"><h2>Notes</h2><div class="lines"></div></section>
+  </div>
+</main>
+
+<div class="page2">
+  <h2 class="section-title">What you can do</h2>
+  <div class="features">
+    <section class="card feat">
+      <h3>Rage</h3><span class="when">Bonus action · 3 per long rest · 1 back on a short rest</span>
+      <ul>
+        <li>Take <b>half damage</b> from bludgeoning, piercing &amp; slashing (weapons, claws, bites).</li>
+        <li><b>+2 damage</b> on your Strength attacks.</li>
+        <li><b>Advantage</b> on Strength checks and saving throws.</li>
+        <li>Lasts until the end of your next turn and keeps going while you attack enemies (or use a bonus action to extend it). Max 10 minutes.</li>
+        <li>No spellcasting and no heavy armor while raging.</li>
+      </ul>
+    </section>
+    <section class="card feat">
+      <h3>Reckless Attack</h3><span class="when">Your choice at your first attack each turn</span>
+      <p>Get <b>advantage</b> on your Strength attacks until your next turn. The catch: enemies get advantage against you too. Usually worth it, because you have lots of HP and Rage halves the damage.</p>
+    </section>
+    <section class="card feat">
+      <h3>Frenzy <small>(Berserker)</small></h3><span class="when">While raging + reckless</span>
+      <p>The <b>first enemy you hit</b> on each of your turns takes an extra <b>2d6</b> damage. This is why you Rage and go Reckless every fight.</p>
+    </section>
+    <section class="card feat">
+      <h3>Extra Attack</h3><span class="when">Every time you take the Attack action</span>
+      <p>You attack <b>twice</b> instead of once: two greataxe swings, or two handaxe throws. You can walk between the two attacks, or aim them at different enemies.</p>
+    </section>
+    <section class="card feat">
+      <h3>Savage Attacker <small>(feat)</small></h3><span class="when">Once per turn, when you hit</span>
+      <p>Roll your weapon's damage dice <b>twice</b> and use the higher roll.</p>
+    </section>
+    <section class="card feat">
+      <h3>Weapon Mastery</h3><span class="when">Always on</span>
+      <ul>
+        <li><b>Greataxe – Cleave:</b> after a hit, make one extra attack on a 2nd enemy within 5 ft of the first (no +4 on that damage). Once per turn.</li>
+        <li><b>Handaxe – Vex:</b> after a hit, you have advantage on your next attack against that enemy.</li>
+        <li>You have one more mastery slot. Pick it when you find a new weapon you like.</li>
+      </ul>
+    </section>
+    <section class="card feat">
+      <h3>Tough Body</h3><span class="when">Always on</span>
+      <ul>
+        <li><b>Unarmored Defense:</b> AC 14 (10 + DEX + CON) with no armor.</li>
+        <li><b>Danger Sense:</b> advantage on Dexterity saves (traps, explosions, fireballs).</li>
+        <li><b>Fast Movement:</b> speed 40 ft (if you don't wear heavy armor).</li>
+      </ul>
+    </section>
+    <section class="card feat">
+      <h3>Primal Knowledge</h3><span class="when">While raging</span>
+      <p>Acrobatics, Intimidation, Perception, Stealth and Survival can be rolled with <b>Strength</b> instead, and Rage gives Strength checks <b>advantage</b>. Need to scare someone? Rage first.</p>
+    </section>
+    <section class="card feat">
+      <h3>Human</h3><span class="when">Species traits</span>
+      <ul>
+        <li><b>Heroic Inspiration</b> (1 per long rest): rolled badly? Reroll one die and use the new roll.</li>
+        <li><b>Tough</b> (feat): +10 max HP, already counted in your 65.</li>
+        <li><b>Skillful:</b> trained in Insight (spot lies and moods).</li>
+        <li>No darkvision: carry a torch in dark places.</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="extras">
+    <section class="card">
+      <h2>Backstory (an idea)</h2>
+      <p>You spent twelve years with a mercenary company as the one who kicked down the door. When the company broke up, you kept the axe, the dice, and a bad habit of solving problems head-first.</p>
+      <ul>
+        <li><b>Personality:</b> loud, loyal, always hungry. Greets strangers like old friends.</li>
+        <li><b>Ideal:</b> nobody gets left behind.</li>
+        <li><b>Bond:</b> the old company banner, tied around the axe handle.</li>
+        <li><b>Flaw:</b> charges first, plans later.</li>
+      </ul>
+    </section>
+    <section class="card">
+      <h2>Gear &amp; training</h2>
+      <ul>
+        <li>Greataxe, 4 handaxes</li>
+        <li>Explorer's pack: backpack, bedroll, rope, torches, tinderbox, waterskin, 10 days of rations</li>
+        <li>Healer's kit (stabilize a dying friend), set of dice, traveler's clothes, 30 gold</li>
+        <li><b>Armor:</b> light, medium, shields</li>
+        <li><b>Weapons:</b> all simple and martial weapons</li>
+        <li><b>Languages:</b> Common + two of your choice (ask your DM)</li>
+        <li><b>Also trained in:</b> playing dice games</li>
+      </ul>
+    </section>
+    <section class="card">
+      <h2>Rules in 30 seconds</h2>
+      <ul>
+        <li><b>Advantage:</b> roll two d20s, keep the higher. <b>Disadvantage:</b> keep the lower.</li>
+        <li><b>Natural 20</b> on an attack: always hits and it's a <b>critical</b>. Roll double the damage dice.</li>
+        <li><b>Natural 1</b> on an attack: always a miss.</li>
+        <li><b>0 HP:</b> you fall unconscious. Each turn roll a d20: 10+ is a success, 3 successes = stable, 3 failures = dead. A natural 20 gets you back up with 1 HP.</li>
+        <li><b>Short rest</b> (1 hour): 1 Rage back, spend Hit Dice to heal (d12+3 each).</li>
+        <li><b>Long rest</b> (8 hours): everything back to full, including Heroic Inspiration.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+</div>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const KEY = 'barbarian-sheet-v2';
+  const MAX_HP = 65, PB = 3, RAGE_DMG = 2, RAGE_MAX = 3, HD_MAX = 5;
+  const ABIL = { STR:['Strength',18], DEX:['Dexterity',13], CON:['Constitution',16], INT:['Intelligence',10], WIS:['Wisdom',12], CHA:['Charisma',8] };
+  const mod = k => Math.floor((ABIL[k][1] - 10) / 2);
+  const fmt = n => (n < 0 ? '−' : '+') + Math.abs(n);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+  const SAVE_PROF = new Set(['STR', 'CON']);
+  const SKILLS = [
+    ['Acrobatics','DEX'], ['Animal Handling','WIS',1], ['Arcana','INT'], ['Athletics','STR',1], ['Deception','CHA'],
+    ['History','INT'], ['Insight','WIS',1], ['Intimidation','CHA',1], ['Investigation','INT'], ['Medicine','WIS'],
+    ['Nature','INT'], ['Perception','WIS',1], ['Performance','CHA'], ['Persuasion','CHA'], ['Religion','INT'],
+    ['Sleight of Hand','DEX'], ['Stealth','DEX'], ['Survival','WIS',1]
+  ];
+  const PRIMAL = new Set(['Acrobatics','Intimidation','Perception','Stealth','Survival']);
+  const WEAPONS = {
+    greataxe: { name:'Greataxe', die:12 },
+    handaxe:  { name:'Handaxe',  die:6 },
+    cleave:   { name:'Cleave',   die:12, noMod:true }
+  };
+
+  const TURN_RESET = { attacks:0, frenzyUsed:false, savageUsed:false, cleaveUsed:false, canCleave:false, reckless:false, rageNew:false, extended:false };
+  const fresh = () => Object.assign({
+    name:'', hp:MAX_HP, temp:0, rages:RAGE_MAX, raging:false, inspiration:1, hitDice:HD_MAX,
+    vex:0, ds:0, df:0, dead:false
+  }, TURN_RESET);
+  let S;
+  try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { S = fresh(); }
+  let pending = null;     // attack waiting for "hit / miss"
+  let lastRoll = null;    // for Heroic Inspiration rerolls
+  let lastDamage = null;  // for "oops, halve it"
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+  const keepName = () => ({ name: S.name });
+
+  const rnd = n => {
+    const buf = new Uint32Array(1); crypto.getRandomValues(buf);
+    return 1 + (buf[0] % n);
+  };
+  const roll = (count, sides) => Array.from({ length: count }, () => rnd(sides));
+  const sum = a => a.reduce((x, y) => x + y, 0);
+  const d20 = adv => { const dice = [rnd(20)]; if (adv) dice.push(rnd(20)); return { dice, nat: Math.max(...dice) }; };
+  const diceText = r => r.dice.length > 1 ? `rolled ${r.dice.join(' & ')} with advantage → <b>${r.nat}</b>` : `rolled <b>${r.nat}</b>`;
+  const remember = redo => { lastRoll = { snap: JSON.stringify(S), redo }; };
+  const rerollBtn = () => S.inspiration > 0 && lastRoll ? '<button class="btn" data-act="reroll">Reroll (Heroic Inspiration)</button>' : '';
+
+  function show(title, big, detail, cls = '', actions = '') {
+    $('#rTitle').textContent = title;
+    const b = $('#rBig');
+    b.textContent = big;
+    b.className = 'r-big ' + cls;
+    void b.offsetWidth;
+    b.classList.add('pop');
+    $('#rDetail').innerHTML = detail;
+    $('#rActions').innerHTML = actions;
+  }
+  function log(html) {
+    const el = document.createElement('div');
+    el.innerHTML = html;
+    const L = $('#log');
+    L.prepend(el);
+    while (L.children.length > 60) L.lastChild.remove();
+  }
+  function shake() {
+    document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake');
+  }
+
+  /* ---------- checks ---------- */
+  function check(label, bonus, adv, why) {
+    remember(() => check(label, bonus, adv, why));
+    const r = d20(adv), tot = r.nat + bonus;
+    const extra = why ? ` <i>(${why})</i>` : '';
+    show(label, tot, `${diceText(r)} ${fmt(bonus)}${extra}`, r.nat === 20 ? 'crit' : r.nat === 1 ? 'fail' : '', rerollBtn());
+    log(`<b>${label}: ${tot}</b> <small>(${r.dice.join(' & ')} ${fmt(bonus)})</small>`);
+  }
+  function skillInfo([name, ab, prof]) {
+    let use = ab;
+    if (S.raging && PRIMAL.has(name) && mod('STR') > mod(ab)) use = 'STR';
+    return { bonus: mod(use) + (prof ? PB : 0), use, adv: S.raging && use === 'STR' };
+  }
+
+  /* ---------- combat ---------- */
+  function attack(key) {
+    if (S.hp <= 0) { show('Can\'t attack', '…', 'You are unconscious. Roll death saves (in the Hit Points box).', 'fail'); return; }
+    if (key === 'cleave' && (!S.canCleave || S.cleaveUsed)) return;
+    remember(() => attack(key));
+    const tips = [];
+    if (key !== 'cleave' && S.attacks === 0) {
+      if (!S.raging && S.rages > 0) tips.push('Tip: RAGE first (bonus action) for +2 damage and half damage taken.');
+      else if (S.raging && !S.reckless) tips.push('Tip: next turn, tick Reckless Attack before your first swing for advantage + 2d6 Frenzy.');
+    }
+    if (key === 'cleave') S.cleaveUsed = true; else S.attacks++;
+    S.extended = true;
+    const w = WEAPONS[key];
+    const why = [];
+    if (S.reckless) why.push('Reckless');
+    if (S.vex > 0 && key !== 'cleave') { why.push('Vex'); S.vex = 0; }
+    const r = d20(why.length > 0), bonus = mod('STR') + PB, tot = r.nat + bonus;
+    const label = key === 'cleave' ? 'Cleave attack (2nd enemy)'
+      : S.attacks === 1 ? `${w.name}: attack 1 of 2`
+      : S.attacks === 2 ? `${w.name}: Extra Attack (2 of 2)`
+      : `${w.name} attack`;
+    const adv = why.length ? ` · advantage from ${why.join(' + ')}` : '';
+    const tipHtml = tips.length ? `<br><small>${tips.join(' ')}</small>` : '';
+    if (r.nat === 1) {
+      pending = null;
+      show(label, 'MISS', `Natural 1: always a miss. Shake it off!${adv}${tipHtml}`, 'fail', rerollBtn());
+      log(`<b>${label}:</b> natural 1, miss <small>(${r.dice.join(' & ')})</small>`);
+    } else if (r.nat === 20) {
+      pending = { key, crit: true };
+      show('NATURAL 20!', 'CRIT!', `Critical hit! Damage dice are doubled.${adv}${tipHtml}`, 'crit',
+        '<button class="btn primary" data-act="hit">Roll critical damage</button>');
+      log(`<b>${label}: NATURAL 20!</b>`);
+      shake();
+    } else {
+      pending = { key, crit: false };
+      show(label, tot, `${diceText(r)} ${fmt(bonus)}${adv}<br>Ask your DM: <b>does ${tot} hit?</b>${tipHtml}`, '',
+        '<button class="btn primary" data-act="hit">It hits! Roll damage</button><button class="btn" data-act="miss">It missed</button>' + rerollBtn());
+      log(`<b>${label}: ${tot} to hit</b> <small>(${r.dice.join(' & ')} ${fmt(bonus)})</small>`);
+    }
+    save(); render();
+  }
+
+  function afterSwingNote(key) {
+    if (key === 'cleave') return S.attacks < 2 ? 'Don\'t forget your other swing!' : 'Click <b>End turn</b> when you are done moving.';
+    if (S.attacks === 1) return 'Now use your <b>Extra Attack</b>: swing again!';
+    if (S.attacks >= 2) return S.canCleave && !S.cleaveUsed
+      ? 'Both swings used. Another enemy next to your target? <b>Cleave</b>! Otherwise click <b>End turn</b>.'
+      : 'Both swings used. Click <b>End turn</b> when you are done moving.';
+    return '';
+  }
+
+  function rollDamage() {
+    if (!pending) return;
+    const { key, crit } = pending; pending = null; lastRoll = null;
+    const w = WEAPONS[key], n = crit ? 2 : 1;
+    let dice = roll(n, w.die);
+    const notes = [], parts = [];
+    if (!S.savageUsed) {
+      const alt = roll(n, w.die);
+      S.savageUsed = true;
+      notes.push(`Savage Attacker: rolled ${sum(dice)} and ${sum(alt)}, kept ${Math.max(sum(dice), sum(alt))}`);
+      if (sum(alt) > sum(dice)) dice = alt;
+    }
+    let total = sum(dice);
+    parts.push(`${n}d${w.die}: ${sum(dice)}`);
+    if (!w.noMod) { total += mod('STR'); parts.push(`STR +${mod('STR')}`); }
+    if (S.raging) { total += RAGE_DMG; parts.push(`Rage +${RAGE_DMG}`); }
+    if (S.raging && S.reckless && !S.frenzyUsed) {
+      const f = roll(RAGE_DMG * n, 6);
+      S.frenzyUsed = true;
+      total += sum(f);
+      parts.push(`Frenzy ${RAGE_DMG * n}d6: ${sum(f)}`);
+    }
+    if (key === 'greataxe' && !S.cleaveUsed) S.canCleave = true;
+    if (key === 'handaxe') { S.vex = 2; notes.push('Vex: advantage on your next attack against this same enemy.'); }
+    notes.push(afterSwingNote(key));
+    show(crit ? 'Critical damage!' : `${w.name} damage`, total, `${parts.join(' · ')} slashing<br>${notes.filter(Boolean).join('<br>')}`, crit ? 'crit' : '');
+    log(`<b>${w.name} hits for ${total}</b> <small>(${parts.join(', ')})</small>`);
+    shake();
+    save(); render();
+  }
+
+  function turnWarnings() {
+    const w = [];
+    if (S.hp <= 0 || S.dead) return w;
+    if (pending) w.push({ text: 'Your last attack is still waiting: <b>did it hit?</b>',
+      btn: '<button class="btn primary" data-act="hit">It hit</button><button class="btn" data-act="miss">It missed</button>' });
+    if (!S.raging && S.rages > 0) w.push({ text: 'You are <b>not raging</b>. In a fight, start with RAGE (bonus action): +2 damage and half damage taken.',
+      btn: '<button class="btn primary" data-act="rage">RAGE!</button>' });
+    if (S.attacks === 0 && !S.cleaveUsed) {
+      if (S.raging && !S.rageNew && !S.extended) w.push({ text: 'You didn\'t attack, so your <b>Rage will end</b>. Attack, or use your bonus action to keep it going.',
+        btn: '<button class="btn primary" data-act="attack" data-w="greataxe">Swing greataxe</button><button class="btn" data-act="extend">Keep raging (bonus action)</button>' });
+      else w.push({ text: 'You <b>didn\'t attack</b> this turn. Your Attack action gives you 2 swings.',
+        btn: '<button class="btn primary" data-act="attack" data-w="greataxe">Swing greataxe</button>' });
+    } else if (S.attacks === 1 && !pending) {
+      w.push({ text: 'You only swung once. <b>Extra Attack</b> gives you a 2nd swing!',
+        btn: '<button class="btn primary" data-act="attack" data-w="greataxe">Swing again</button>' });
+    }
+    if (S.canCleave && !S.cleaveUsed) w.push({ text: 'You hit someone. Is another enemy right next to them? You can still <b>Cleave</b>.',
+      btn: '<button class="btn" data-act="attack" data-w="cleave">Cleave</button>' });
+    return w;
+  }
+
+  function endTurn(force) {
+    const w = force ? [] : turnWarnings();
+    if (w.length) {
+      show('Wait! Before you end your turn…', '!',
+        '<ul class="warn">' + w.map(x => `<li>${x.text}<div>${x.btn}</div></li>`).join('') + '</ul>',
+        'warn', '<button class="btn" data-act="endforce">End turn anyway</button>');
+      return;
+    }
+    newTurn();
+  }
+
+  function newTurn() {
+    const mark = b => b ? '✓' : '✗';
+    const did = { rage: S.raging, reckless: S.reckless, swings: S.attacks };
+    let rageEnded = false;
+    if (S.raging && !S.rageNew && !S.extended) {
+      S.raging = false; rageEnded = true;
+      log('<b>Rage ended:</b> <small>you didn\'t attack or keep it going</small>');
+    }
+    const perfect = did.rage && did.reckless && did.swings >= 2;
+    Object.assign(S, TURN_RESET);
+    if (S.vex > 0) S.vex--;
+    pending = null; lastRoll = null; lastDamage = null;
+    const recap = `Last turn: ${mark(did.rage)} Rage · ${mark(did.reckless)} Reckless · ${mark(did.swings >= 2)} ${Math.min(did.swings, 2)}/2 swings`;
+    let msg = perfect ? '<b>Perfect barbarian turn!</b> ' : '';
+    msg += S.raging ? 'Still raging! Tick Reckless Attack and swing twice.'
+      : rageEnded ? 'Your Rage ended. Click <b>RAGE!</b> again if you are still fighting.'
+      : 'Start with <b>RAGE!</b> (bonus action), then swing twice.';
+    show('Your turn!', '⚔', `${msg}<br><small>${recap}</small>`, perfect ? 'crit' : '');
+    log(`<b>— New turn —</b> <small>${recap}</small>`);
+    save(); render();
+  }
+
+  function toggleRage() {
+    if (S.raging) {
+      S.raging = false;
+      show('Rage ended', '…', 'Calm again. For now.');
+      log('<b>Rage ends.</b>');
+    } else {
+      if (S.rages <= 0 || S.hp <= 0) return;
+      S.rages--; S.raging = true; S.rageNew = true;
+      show('RAAAAGH!', 'RAGE', 'Half damage from weapons &amp; claws · <b>+2 damage</b> · advantage on Strength checks &amp; saves<br><small>Now tick Reckless Attack and swing twice!</small>', 'crit');
+      log(`<b>${S.name.trim() ? esc(S.name.trim().toUpperCase()) + ' RAGES!' : 'YOU RAGE!'}</b> <small>(${S.rages} rages left)</small>`);
+      shake();
+    }
+    save(); render();
+  }
+
+  /* ---------- hit points ---------- */
+  const amount = () => { const v = parseInt($('#hpAmt').value, 10); return Number.isFinite(v) && v > 0 ? v : 0; };
+
+  function takeDamage(amt, half) {
+    if (!amt || S.dead) return;
+    const snap = JSON.stringify(S);
+    if (half) amt = Math.floor(amt / 2);
+    if (S.hp <= 0) {
+      S.ds = 0; S.df = Math.min(3, S.df + 1);
+      if (S.df >= 3) S.dead = true;
+      const msg = S.dead ? 'Third failed death save… you have fallen. Talk to your DM.' : 'Hit while down: that counts as a failed death save.';
+      show('Ouch!', `−${amt}`, msg, 'fail'); log(`<b>Damage while down:</b> ${msg}`);
+      save(); render(); return;
+    }
+    let left = amt, absorbed = 0;
+    if (S.temp > 0) { absorbed = Math.min(S.temp, left); S.temp -= absorbed; left -= absorbed; }
+    S.hp -= left;
+    let msg = `Took ${amt} damage${half ? ' (halved by Rage)' : ''}${absorbed ? `, ${absorbed} blocked by temp HP` : ''}.`;
+    if (S.hp <= 0) {
+      if (-S.hp >= MAX_HP) {
+        S.hp = 0; S.dead = true; S.raging = false;
+        msg += ' Massive damage: killed outright! Talk to your DM.';
+      } else {
+        S.hp = 0; S.raging = false; S.ds = 0; S.df = 0;
+        msg += ' You fall unconscious! Roll death saves on your turns.';
+      }
+    }
+    let actions = '';
+    lastDamage = null;
+    if (!half && S.hp > 0) {
+      if (S.raging) {
+        lastDamage = { snap, amt };
+        actions = '<button class="btn" data-act="halfundo">Oops, it was a weapon/claw/bite: halve it</button>';
+      } else if (S.rages > 0) {
+        msg += '<br><small>Tip: while raging, damage from weapons and claws is halved.</small>';
+      }
+    }
+    show(half ? 'Half damage' : 'Ouch!', `−${amt}`, msg, 'fail', actions);
+    log(`<b>Damage:</b> ${msg}`);
+    save(); render();
+  }
+  function heal(amt, source) {
+    if (!amt) return;
+    if (S.dead) { show('Too late', '…', 'You are dead. Only your DM (or a miracle) can fix this.', 'fail'); return; }
+    const before = Math.max(0, S.hp);
+    S.hp = Math.min(MAX_HP, before + amt);
+    S.ds = 0; S.df = 0;
+    const msg = `${source || 'Healed'} +${S.hp - before} HP${before === 0 ? '. You\'re back up!' : ''}`;
+    show('Healing', `+${S.hp - before}`, msg);
+    log(`<b>${msg}</b>`);
+    save(); render();
+  }
+  function gainTemp(amt) {
+    if (!amt) return;
+    const old = S.temp;
+    S.temp = Math.max(S.temp, amt);
+    const msg = old >= amt ? `You already have ${old} temp HP. Temp HP don't stack, so you keep ${old}.` : `You now have ${S.temp} temporary HP (they get used up first).`;
+    show('Temp HP', S.temp, msg);
+    log(`<b>${msg}</b>`);
+    save(); render();
+  }
+  function deathSave() {
+    if (S.hp > 0 || S.dead || S.ds >= 3) return;
+    remember(() => deathSave());
+    const n = rnd(20);
+    let msg;
+    if (n === 20) { S.hp = 1; S.ds = 0; S.df = 0; msg = 'Natural 20! You surge back up with 1 HP!'; shake(); }
+    else if (n === 1) { S.df = Math.min(3, S.df + 2); msg = 'Natural 1: two failures!'; }
+    else if (n >= 10) { S.ds++; msg = 'Success.'; }
+    else { S.df++; msg = 'Failure.'; }
+    if (S.ds >= 3) msg += ' Three successes: you are stable (unconscious, but no longer dying).';
+    if (S.df >= 3) { S.dead = true; msg += ' Three failures… you have fallen. Talk to your DM.'; }
+    show('Death save', n, msg, n >= 10 ? '' : 'fail', n < 10 ? rerollBtn() : '');
+    log(`<b>Death save: ${n}</b> ${msg}`);
+    save(); render();
+  }
+
+  /* ---------- rests ---------- */
+  function spendHitDie() {
+    if (S.hitDice <= 0 || S.hp >= MAX_HP || S.dead) return;
+    S.hitDice--;
+    const r = rnd(12);
+    heal(r + mod('CON'), `Hit Die (rolled ${r} + 3):`);
+  }
+  function shortRest() {
+    S.rages = Math.min(RAGE_MAX, S.rages + 1);
+    Object.assign(S, TURN_RESET, { raging:false, vex:0 });
+    pending = null; lastRoll = null; lastDamage = null;
+    show('Short rest', '☕', '1 Rage back. Hurt? Click <b>Spend</b> next to Hit Dice to heal.');
+    log('<b>Short rest:</b> +1 Rage');
+    save(); render();
+  }
+  function longRest() {
+    S = Object.assign(fresh(), keepName()); pending = null; lastRoll = null; lastDamage = null;
+    show('Long rest', '☾', 'A good night\'s sleep. Everything is back to full, including Heroic Inspiration!');
+    log('<b>Long rest:</b> full HP and all resources back');
+    save(); render();
+  }
+
+  /* ---------- rendering ---------- */
+  function pips(res, count, max, cls = '') {
+    let h = '<div class="pips">';
+    for (let i = 0; i < max; i++) h += `<button class="pip ${cls} ${i < count ? 'on' : ''}" data-act="pip" data-res="${res}" data-i="${i}" aria-label="${res} ${i + 1}"></button>`;
+    return h + '</div>';
+  }
+  function setTitle() {
+    document.title = (S.name.trim() ? S.name.trim() + ' · ' : '') + 'Level 5 Human Barbarian';
+  }
+
+  function render() {
+    document.body.classList.toggle('raging', S.raging);
+
+    $('#abilities').innerHTML = Object.entries(ABIL).map(([k, [name, score]]) => {
+      const adv = k === 'STR' && S.raging ? '<span class="tag">ADV</span>' : '';
+      return `<button class="abil ${k === 'STR' ? 'main-stat' : ''}" data-roll="abil" data-key="${k}" title="Roll a ${name} check">${adv}
+        <span class="k">${k}</span><span class="m">${fmt(mod(k))}</span><span class="s">${score}</span></button>`;
+    }).join('');
+
+    $('#saves').innerHTML = Object.entries(ABIL).map(([k, [name]]) => {
+      const prof = SAVE_PROF.has(k);
+      let tag = '';
+      if (k === 'DEX') tag = '<span class="tag">ADV</span>';
+      if (k === 'STR') tag = S.raging ? '<span class="tag">ADV</span>' : '<span class="tag soft">ADV raging</span>';
+      return `<button class="row" data-roll="save" data-key="${k}"><span class="dot ${prof ? 'on' : ''}"></span>
+        <span class="nm">${name}</span>${tag || '<span></span>'}<span class="val">${fmt(mod(k) + (prof ? PB : 0))}</span></button>`;
+    }).join('');
+
+    $('#skills').innerHTML = SKILLS.map((sk, i) => {
+      const [name, ab, prof] = sk, info = skillInfo(sk);
+      const star = PRIMAL.has(name) || name === 'Athletics' ? ' <span class="star">★</span>' : '';
+      const changed = info.use !== ab;
+      const tag = info.adv ? '<span class="tag">ADV</span>' : '<span></span>';
+      return `<button class="row" data-roll="skill" data-i="${i}"><span class="dot ${prof ? 'on' : ''}"></span>
+        <span class="nm">${name}<small>${changed ? 'STR' : ab}</small>${star}</span>${tag}<span class="val ${changed ? 'rage' : ''}">${fmt(info.bonus)}</span></button>`;
+    }).join('');
+
+    const rb = $('#rageBtn');
+    rb.textContent = S.raging ? 'CALM DOWN' : 'RAGE!';
+    rb.disabled = !S.raging && (S.rages <= 0 || S.hp <= 0);
+    $('#rageStatus').innerHTML = S.raging
+      ? '<b>RAGING!</b> Half damage from weapons &amp; claws<br>+2 damage · advantage on Strength checks &amp; saves'
+        + (!S.rageNew && !S.extended ? '<br><b>Attack this turn to keep your Rage going!</b>' : '')
+      : `<b>${S.rages} of 3</b> rages left<br><small>Bonus action · lasts up to 10 minutes</small>`;
+
+    const rk = $('#reckless'), locked = S.attacks > 0 || S.cleaveUsed;
+    rk.checked = S.reckless; rk.disabled = locked;
+    $('#recklessLbl').classList.toggle('locked', locked);
+
+    const chips = [`<span class="chip ${S.attacks >= 2 ? 'done' : 'go'}">Swings ${S.attacks}/2</span>`];
+    if (S.raging && S.reckless) chips.push(`<span class="chip ${S.frenzyUsed ? 'done' : 'go'}">Frenzy +2d6</span>`);
+    chips.push(`<span class="chip ${S.savageUsed ? 'done' : 'go'}">Savage Attacker</span>`);
+    chips.push(`<span class="chip ${S.cleaveUsed ? 'done' : S.canCleave ? 'go' : ''}">Cleave</span>`);
+    if (S.vex > 0) chips.push('<button class="chip go" data-act="clearvex" title="Click to remove (e.g. if you attack someone else)">Vex: advantage vs. same enemy ✕</button>');
+    $('#turnInfo').innerHTML = chips.join('');
+    $('#axeBtn').textContent = S.attacks === 0 ? 'Swing greataxe (1 of 2)' : S.attacks === 1 ? 'Swing again (Extra Attack)' : 'Swing greataxe';
+    $('#cleaveBtn').disabled = !(S.canCleave && !S.cleaveUsed);
+
+    const steps = document.querySelectorAll('#steps li');
+    steps[0].classList.toggle('done', S.raging);
+    steps[1].classList.toggle('done', S.reckless);
+    steps[2].classList.toggle('done', S.attacks >= 1);
+    steps[3].classList.toggle('done', S.attacks >= 2);
+
+    $('#hpCur').textContent = Math.max(0, S.hp);
+    $('#hpTemp').textContent = S.temp;
+    $('#hpBar').style.width = (Math.max(0, S.hp) / MAX_HP * 100) + '%';
+    $('#tempBar').style.width = Math.min(100, S.temp / MAX_HP * 100) + '%';
+    $('#hpState').textContent = S.dead ? 'Dead' : S.hp <= 0 ? (S.ds >= 3 ? 'Stable' : 'Dying!') : S.hp <= MAX_HP / 2 ? 'Bloodied' : 'Healthy';
+    $('#halfBtn').classList.toggle('glow', S.raging);
+
+    const death = $('#death');
+    death.hidden = S.hp > 0;
+    if (S.hp <= 0) {
+      const marks = n => '●'.repeat(n) + '○'.repeat(3 - n);
+      death.innerHTML = S.dead ? '<b>You have fallen.</b><br>Talk to your DM.'
+        : S.ds >= 3 ? '<b>Stable.</b> Unconscious, but not dying.<br>Any healing wakes you up.'
+        : `<b>Dying!</b> Roll a death save on each of your turns.<br>Success ${marks(S.ds)} · Fail ${marks(S.df)}<br><button class="btn primary" data-act="deathsave">Roll death save</button>`;
+    }
+
+    $('#resources').innerHTML = `
+      <div class="res"><div class="nm">Rage<small>3 per long rest · 1 back on a short rest</small></div><span></span>${pips('rages', S.rages, RAGE_MAX)}</div>
+      <div class="res"><div class="nm">Heroic Inspiration<small>Reroll one die · 1 per long rest<span class="no-print"> (a Reroll button shows up after your d20 rolls)</span></small></div><span></span>${pips('inspiration', S.inspiration, 1)}</div>
+      <div class="res"><div class="nm">Hit Dice (d12)<small>Short rest: spend one to heal d12 + 3</small></div>
+        <button class="btn small no-print" data-act="hitdie" ${S.hitDice <= 0 || S.hp >= MAX_HP || S.dead ? 'disabled' : ''}>Spend</button>${pips('hitDice', S.hitDice, HD_MAX, 'hd')}</div>`;
+  }
+
+  /* ---------- events ---------- */
+  document.addEventListener('click', e => {
+    const r = e.target.closest('[data-roll]');
+    if (r) {
+      const t = r.dataset.roll;
+      if (t === 'init') check('Initiative', mod('DEX'), false);
+      else if (t === 'die') {
+        const n = +r.dataset.n, v = rnd(n);
+        show(`d${n}`, v, `You rolled a d${n}.`, n === 20 && v === 20 ? 'crit' : '');
+        log(`<b>d${n}: ${v}</b>`);
+      } else if (t === 'abil') {
+        const k = r.dataset.key;
+        check(`${ABIL[k][0]} check`, mod(k), k === 'STR' && S.raging, k === 'STR' && S.raging ? 'advantage from Rage' : '');
+      } else if (t === 'save') {
+        const k = r.dataset.key, adv = k === 'DEX' || (k === 'STR' && S.raging);
+        check(`${ABIL[k][0]} save`, mod(k) + (SAVE_PROF.has(k) ? PB : 0), adv,
+          k === 'DEX' ? 'advantage from Danger Sense' : adv ? 'advantage from Rage' : '');
+      } else if (t === 'skill') {
+        const sk = SKILLS[+r.dataset.i], info = skillInfo(sk);
+        const why = info.use !== sk[1] ? 'Primal Knowledge: rolled with STR + Rage advantage' : info.adv ? 'advantage from Rage' : '';
+        check(sk[0], info.bonus, info.adv, why);
+      }
+      return;
+    }
+    const a = e.target.closest('[data-act]');
+    if (!a) return;
+    switch (a.dataset.act) {
+      case 'rage': toggleRage(); break;
+      case 'attack': attack(a.dataset.w); break;
+      case 'hit': rollDamage(); break;
+      case 'miss': {
+        const key = pending ? pending.key : 'greataxe';
+        pending = null; lastRoll = null;
+        show('Miss', '✗', 'No damage this time. ' + afterSwingNote(key), 'fail');
+        log('<b>Miss.</b>'); break;
+      }
+      case 'endturn': endTurn(false); break;
+      case 'endforce': endTurn(true); break;
+      case 'extend':
+        S.extended = true;
+        show('Rage kept going', 'RAGE', 'You used your bonus action to keep your Rage going.', 'crit');
+        log('<b>Bonus action:</b> <small>Rage kept going</small>');
+        save(); render(); break;
+      case 'reroll': {
+        if (!lastRoll || S.inspiration <= 0) break;
+        const { snap, redo } = lastRoll;
+        S = JSON.parse(snap); S.inspiration = 0; pending = null; lastRoll = null;
+        log('<b>Heroic Inspiration!</b> <small>Rerolling. You must use the new roll.</small>');
+        redo(); save(); render(); break;
+      }
+      case 'halfundo': {
+        if (!lastDamage) break;
+        const { snap, amt } = lastDamage;
+        S = JSON.parse(snap); lastDamage = null;
+        takeDamage(amt, true); break;
+      }
+      case 'clearvex': S.vex = 0; save(); render(); break;
+      case 'dmg': takeDamage(amount(), false); break;
+      case 'dmghalf': takeDamage(amount(), true); break;
+      case 'heal': heal(amount()); break;
+      case 'temp': gainTemp(amount()); break;
+      case 'deathsave': deathSave(); break;
+      case 'hitdie': spendHitDie(); break;
+      case 'short': shortRest(); break;
+      case 'long': longRest(); break;
+      case 'pip': {
+        const res = a.dataset.res, i = +a.dataset.i;
+        S[res] = i < S[res] ? i : i + 1;
+        save(); render(); break;
+      }
+      case 'print': window.print(); break;
+      case 'reset':
+        if (confirm('Reset to full HP and all resources?')) {
+          S = Object.assign(fresh(), keepName()); pending = null; lastRoll = null; lastDamage = null;
+          $('#log').innerHTML = ''; save(); render(); show('Ready', '⚔', 'Fresh sheet. Go get them!');
+        }
+        break;
+    }
+  });
+  $('#reckless').addEventListener('change', e => {
+    if (S.attacks > 0 || S.cleaveUsed) { e.target.checked = S.reckless; return; }
+    S.reckless = e.target.checked;
+    if (S.reckless) log('<b>Reckless!</b> <small>Advantage on your attacks, enemies have advantage on you until your next turn</small>');
+    save(); render();
+  });
+  const nameEl = $('#heroName');
+  nameEl.value = S.name || '';
+  nameEl.addEventListener('input', () => { S.name = nameEl.value; save(); setTitle(); });
+
+  setTitle();
+  render();
+})();
+</script>
+</body>
+</html>
